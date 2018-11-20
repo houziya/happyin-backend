@@ -1,0 +1,151 @@
+<?php 
+include(dirname(__DIR__).'/header.phtml');
+include(dirname(__DIR__)."/menu/navibar.phtml");
+include(dirname(__DIR__)."/menu/sideBar.phtml");
+?>
+<!-- START 以上内容不需更改，保证该TPL页内的标签匹配即可 -->
+
+<?php 
+echo @$osadmin_action_alert;
+echo @$osadmin_quick_note;
+?>    
+<div class="well">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">请填写账号资料</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane active in" id="home">
+
+            <form id="tab" method="post" action="add" autocomplete="off" enctype="multipart/form-data" >
+            	<label>账号类型</label>
+            		<select name="user_type" id="sel" class="input-xlarge">
+            			<?php 
+            			     if ($userInfo['user_id'] == HI\Config\Console\ADMIN_ID) {
+            			         
+            			?>
+                    			<option value="1">微商渠道号</option>
+                    			<option value="0" selected>普通</option>
+            			<?php 
+            			     } elseif ($userInfo['user_type'] == 1) {
+            			?>
+            				<option value="1">微商渠道号</option>
+            			<?php 
+            			     } else {
+            			?>
+            				<option value="0">普通</option>
+            			<?php 
+                            }
+            			?>
+            		</select>
+            	<a id='devel'>
+            	<label>代理级别</label>
+                   	<select name="topic" class="input-xlarge" id="agent" >
+                   		<?php 
+                   		   for($i = 1; $i <= HI\Config\Console\AGENT_SERIES; $i++) {
+               		           if ($userInfo['user_type'] == 0) {
+               		               if ($i == 1) {
+           		        ?>
+                   		 		<option value="<?php echo $i;?>"><?php echo $i . '级代理'; ?></option>
+           		       <?php
+               		               }
+               		           } elseif ($userInfo['topic'] == $i) {
+   		               ?>
+   		               			<option value="<?php echo $i + 1;?>"><?php echo ($i + 1) . '级代理'; ?></option>
+   		               <?php
+               		           }
+                   		   }
+                   		?>
+                   	</select>
+               	</a>
+<!--                	<a id="first_agent"> -->
+<!--                	<label>上级代理</label> -->
+<!--                		<select name = 'superior_agent' class="input-xlarge" id="superior_agent" > -->
+               			
+<!--                		</select> -->
+<!--                	</a> -->
+				<?php if ($userInfo['user_type'] != 1) {?>
+            	<label>账号组</label> 
+<!--                 <{html_options name=user_group id="DropDownTimezone" class="input-xlarge" options=$group_options selected=0}> -->
+                <select name="user_group" id="DropDownTimezone" class="input-xlarge">
+                    <?php 
+                        foreach ($group_options as $k => $v) {
+                    ?>
+                    	<option value="<?php echo $k;?>"><?php echo $v;?></option>
+                    <?php
+                        }
+                    ?>
+                </select>
+                <?php }?>
+                <label>登录名</label>
+                <input type="text" name="user_name" value="" class="input-xlarge" autofocus="true" required="true" >
+                <label>密码</label>
+                <input type="password" name="password" value="" class="input-xlarge" required="true" >
+                <label>姓名</label>
+                <input type="text" name="real_name" value="" class="input-xlarge" required="true" >
+                <span id="zhifu">
+                    <label>支付宝账号</label>
+                    <input type="text" name="alipay" value="" class="input-xlarge">
+                <?php if ($userInfo['user_group'] == HI\Config\Console\ADMIN_ID) {?>
+                    <label>专属优惠劵标识</label>
+                    <input type="text" name="coupon" value="" class="input-xlarge">
+                    <label>上传优惠劵标识图</label>
+                    <input type="file" name="coupon_image" value="" class="input-xlarge">
+                <?php }?>
+                </span>
+                <label>手机</label>
+                <input type="text" name="mobile" value="" class="input-xlarge" required pattern="\d{11}">
+                <label>邮件</label>
+                <input type="email" name="email" value=""  class="input-xlarge" required="true" >
+                <label>描述</label>
+                <textarea name="user_desc" rows="3" class="input-xlarge"></textarea>
+            <div class="btn-toolbar">
+                <button type="submit" class="btn btn-primary"><strong>提交</strong></button>
+                <div class="btn-group"></div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+$("#zhifu").css("display", "none");
+$("#devel").css("display", "none");
+$("#first_agent").css("display", "none");
+
+function selFun(){
+	var selValue = $("#sel option:selected").val();
+    if (selValue == 1) {
+       $("#zhifu").css("display", "block");
+       $("#devel").css("display", "block");
+    } else {
+    	$("#zhifu").css("display", "none");
+    	$("#devel").css("display", "none");
+    	$("#first_agent").css("display", "none");
+    }
+}
+selFun();
+$("#sel").change(function() {
+	selFun();
+ });
+
+$("#agent").change(function() {
+	var devel = $("#agent option:selected").val();
+	$.ajax({
+        type: "POST",
+        url: location.protocol + '//' + location.host + '/Console/User/ajax',
+        data: {content:devel},
+        dataType: "json",
+        success: function(data){
+                    $.each(data, function(commentIndex, comment){  
+                    	if (comment == 'error_empty' || comment == 'top_agent') {
+                    		$("#first_agent").css("display", "none");
+                    	} else {
+                    		$("#first_agent").css("display", "block");
+                			$('#superior_agent').html('<option value="'+ comment.user_id +'">'+comment.user_name+'</option>');
+                    	}
+                    });
+                 }
+    });
+})
+</script>
+<!-- END 以下内容不需更改，请保证该TPL页内的标签匹配即可 -->
+<?php include(dirname(__DIR__)."/footer.phtml"); ?>

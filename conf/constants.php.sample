@@ -1,0 +1,527 @@
+<?php
+    //日期
+    define('HI\\User\\MINUTE', 60);
+    define('HI\\User\\HOUR', 3600);
+    define('HI\\User\\DAY', 86400);
+    define('HI\\User\\WEEK', 604800);
+    define('HI\\User\\MONTH', 2592000);
+    define('HI\\User\\YEAR', 31536000);
+    //注册来源
+    define('HI\\User\\REGISTER_TYPE_DEVICE', 0);
+    //注册渠道
+    define('HI\\User\\REGISTER_PLATFORM_IOS', 0);
+    define('HI\\User\\REGISTER_PLATFORM_ANDROID', 1);
+    define('HI\\User\\REGISTER_PLATFORM_H5_IOS', 2);
+    define('HI\\User\\REGISTER_PLATFORM_H5_ANDROID', 3);
+    define('HI\\User\\REGISTER_PLATFORM_H5_OTHERS', 4);
+    //帐号状态
+    define('HI\\User\\ACCOUNT_NORMAL', 1);                //正常状态
+    define('HI\\User\\ACCOUNT_UNLINK', 0);                //解绑状态
+    //验证码可验证次数
+    define('HI\\User\\ATTEMPTS_TIMES', 2);
+    //默认头像
+    define('HI\\User\\DEFAULT_AVATAR', 'profile/avatar/default.jpg');
+    //默认昵称
+    define('HI\\User\\DEFAULT_NICKNAME', '印客');
+    //验证码验证 文字提示
+    define('HI\\User\\PHONE_CONTENT', '手机号已注册');
+    define('HI\\User\\USER_NOT_EXIST', '账号不存在');
+    define('HI\\User\\CAPTCHA_CONTENT', '验证码错误');
+    //用户状态
+    define('HI\\User\\STATUS_NORMAL', 0);
+    define('HI\\User\\STATUS_LOCK', 0);
+    //发送验证码信息文字
+    define('HI\\User\\CAPTCHA_MESSAGE', '快乐印验证码:');
+    //密码加密次数
+    define('HI\\User\\ENCRYPT_NUM', 1000);
+
+
+    //微信验证
+    define('HI\\Config\\WECHAT_APPID', 'wx59fc01b1ef6fcfe5');
+    define('HI\\Config\\WECHAT_SECRET', 'd81545bfcbb76bf75216542ba42c7286');
+    define('HI\\Config\\WECHAT_TOKEN', 'https://api.weixin.qq.com/sns/oauth2/access_token?');
+    define('HI\\Config\\WECHAT_REFRESH_TOKEN', 'https://api.weixin.qq.com/sns/oauth2/refresh_token?');
+    define('HI\\Config\\WECHAT_USER', 'https://api.weixin.qq.com/sns/userinfo?access_token=');
+    define('HI\\Config\\WECHAT_UNIQUE_TOKEN', 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&');
+
+    //微博验证
+    define('HI\\Config\\WEBO_APPID', '3366847509');
+    define('HI\\Config\\WEBO_SECRET', '9bc330d3aa90e1be7f964cb22f3b0fda');
+    define('HI\\Config\\WEBO_TOKEN', 'https://api.weibo.com/oauth2/access_token');
+    define('HI\\Config\\WEBO_TOKEN_INFO', 'https://api.weibo.com/oauth2/get_token_info?');
+    define('HI\\Config\\WEBO_USER_INFO', 'https://api.weibo.com/2/users/show.json?');
+
+    /* qq */
+    define('HI\\Config\\QQ_APPID', '101308522');
+    define('HI\\Config\\QQ_SECRET', '19baf55d27c621272e7f204c2da07970');
+    define('HI\\Config\\QQ_TOKEN', 'https://graph.qq.com/oauth2.0/token?');
+    define('HI\\Config\\QQ_GET_OPENID', 'https://graph.qq.com/oauth2.0/me?access_token=');
+    define('HI\\Config\\QQ_USER_INFO', 'https://graph.qq.com/user/get_user_info?access_token=');
+
+    //校验session的类型
+    define('HI\\User\\SESSION_KEY', 0);     //用户session
+    define('HI\\User\\TUBE_SESSION_KEY', 1);    //用户tube-session
+
+    // Configurable constants for deployment
+    //验证码
+    define('HI\\Config\\SMS_PRODUCT_ID', {{default .Env.HI_PHP_SMS_PRODUCT_ID "129"}});
+    define('HI\\Config\\SMS_TEMPLATE_ID', {{default .Env.HI_PHP_SMS_TEMPLATE_ID "75"}});
+    define('HI\\Config\\SMS_PRODUCT_KEY', {{default .Env.HI_PHP_SMS_PRODUCT_KEY "'15iVYeKg377D59d0'"}});
+    define('HI\\Config\\SMS_URL', {{default .Env.HI_PHP_SMS_URL "'http://access.hoolai.com/message_service/messageService/sendSms.hl?'"}});
+
+    //配置
+    define('HI\\Config\\UPLOAD_DOMAIN', {{default .Env.HI_PHP_UPLOAD_DOMAIN "'http://dev.happyin.com.cn'"}});    //上传域名
+    define('HI\\Config\\DOWNLOAD_DOMAIN', {{default .Env.HI_PHP_DOWNLOAD_DOMAIN "'devel-10041765.file.myqcloud.com'"}});    //下载图片域名
+    define('HI\\Config\\INIT_DOMAIN', {{default .Env.HI_PHP_INIT_DOMAIN "'dev.happyin.com.cn:9970'"}});    //默认域名
+    define('HI\\Config\\SPREAD_DOMAIN', {{default .Env.HI_PHP_SPREAD_DOMAIN "'push.happyin.com.cn:7239'"}});    //订阅域名
+    define('HI\\Config\\LOG_LEVEL', {{default .Env.HI_PHP_LOG_LEVEL "4"}});    //日志级别
+    define('HI\\Config\\FLAG', {{default .Env.HI_PHP_FLAG "1"}});
+    define('HI\\Config\\ZK', {{default .Env.HI_PHP_ZOOKEEPER "'10.141.51.6:2181,10.141.51.6:2182,10.141.51.6:2183/devel'"}});    //zk
+    define('HI\\Config\\ZK_PATH', {{default .Env.HI_PHP_ZOOKEEPER_PATH "'/moca/spread/subscription/'"}});
+    define('HI\\Config\\LIMIT_SIGN', {{default .Env.HI_PHP_LIMIT_SIGN "128"}});
+    define('HI\\Config\\LIMIT_EVENT', {{default .Env.HI_PHP_LIMIT_EVENT "50"}});
+    define('HI\\Config\\MIPUSH_NODE', {{default .Env.HI_PHP_MIPUSH_NODE "'push'"}});
+
+    //统计路径
+    define('HI\\Path\\WRITE_CLIENT_LOG', {{default .Env.HI_PHP_WRITE_CLIENT_LOG "'/usr/local/nginx/logs/stat/'"}});    //日志写入路径
+    define('HI\\Path\\READ_LOG', {{default .Env.HI_PHP_READ_LOG "'/usr/local/nginx/flume/'"}});    //日志读取路径
+
+    // Cache
+    define('HI\\Config\\Cache\\CLASSNAME', {{default .Env.HI_PHP_CACHE_CLASSNAME "'yii\\redis\\Cache'"}});
+    define('HI\\Config\\Cache\\HOSTNAME', {{default .Env.HI_PHP_REDIS_HOSTNAME "'10.141.51.6'"}});
+    define('HI\\Config\\Cache\\PORT', {{default .Env.HI_PHP_REDIS_PORT "7240"}});
+    define('HI\\Config\\Cache\\PASSWORD', {{default .Env.HI_PHP_REDIS_AUTH "'3c7b9ef0e2ea2fd931373465363551efc66845f079fac0862d6c4bf8b5562c8af7ac02931731e4b3811e998c94c70ff148b8447bfd431d829cd2c996bf1e28d5'"}});
+
+    //脚本内存限制
+    define('HI\\Config\\MEMORY_LIMIT', {{default .Env.HI_PHP_MEMORY_LIMIT "'512M'"}});
+
+    // 数据库
+    define('HI\\Config\\Database\\CLASSNAME', {{default .Env.HI_PHP_DATABASE_CLASSNAME "'yii\\db\\Connection'"}});
+    define('HI\\Config\\Database\\DBNAME', {{default .Env.HI_PHP_DATABASE_DBNAME "'hi_devel'"}});
+    define('HI\\Config\\Database\\HOSTNAME', {{default .Env.HI_PHP_DATABASE_HOSTNAME "'10.66.161.251'"}});
+    define('HI\\Config\\Database\\PORT', {{default .Env.HI_PHP_DATABASE_PORT "3306"}});
+    define('HI\\Config\\Database\\DSN', 'mysql:host=' . HI\Config\Database\HOSTNAME . ';port=' . HI\Config\Database\PORT . ';dbname=' . HI\Config\Database\DBNAME);
+    define('HI\\Config\\Database\\USERNAME', {{default .Env.HI_PHP_DATABASE_USERNAME "'devel_readwrite'"}});
+    define('HI\\Config\\Database\\PASSWORD', {{default .Env.HI_PHP_DATABASE_PASSWORD "'2EE6EA13-8D5E-4C34-8F94-CDD65B35E696'"}});
+    define('HI\\Config\\Database\\CHARSET', {{default .Env.HI_PHP_DATABASE_CHARSET "'utf8'"}});
+
+    // Redis
+    define('HI\\Config\\Redis\\HOSTNAME', {{default .Env.HI_PHP_REDIS_HOSTNAME "'10.141.51.6'"}});
+    define('HI\\Config\\Redis\\PORT', {{default .Env.HI_PHP_REDIS_PORT "7240"}});
+    define('HI\\Config\\Redis\\TIMEOUT', {{default .Env.HI_PHP_REDIS_TIMEOUT "1"}});
+    define('HI\\Config\\Redis\\RETRY_INTERVAL', {{default .Env.HI_PHP_REDIS_RETRY_INTERVAL "100"}});
+    define('HI\\Config\\Redis\\AUTH', {{default .Env.HI_PHP_REDIS_AUTH "'3c7b9ef0e2ea2fd931373465363551efc66845f079fac0862d6c4bf8b5562c8af7ac02931731e4b3811e998c94c70ff148b8447bfd431d829cd2c996bf1e28d5'"}});
+    define('HI\\Config\\Redis\\ORDER_PRODUCTS', {{default .Env.HI_PHP_REDIS_ORDER_PRODUCTS "3"}});
+    define('HI\Config\PackagePostSd', 'package-sd');
+    define('HI\Config\PackagePostZj', 'package-zj');
+    define('HI\Config\PackagePostSdUrl', {{default .Env.HI_PHP_Package_Post_Sd_Url "'https://58.56.102.230:1234/e36fd8a3cb8e6167883ba24d45719b8d'"}});
+    define('HI\Config\PackagePostZjUrl', {{default .Env.HI_PHP_Package_Post_Zj_Url "'https://10.141.54.20:1234/sink'"}});
+
+
+    // Session
+    define('HI\\Config\\Session\\CLASSNAME', {{default .Env.HI_PHP_SESSION_CLASSNAME "'yii\\redis\\Session'"}});
+    define('HI\\Config\\Session\\HOSTNAME', {{default .Env.HI_PHP_REDIS_HOSTNAME "'10.141.51.6'"}});
+    define('HI\\Config\\Session\\PORT', {{default .Env.HI_PHP_REDIS_PORT "7240"}});
+    define('HI\\Config\\Session\\PASSWORD', {{default .Env.HI_PHP_REDIS_AUTH "'3c7b9ef0e2ea2fd931373465363551efc66845f079fac0862d6c4bf8b5562c8af7ac02931731e4b3811e998c94c70ff148b8447bfd431d829cd2c996bf1e28d5'"}});
+   
+    //前端URL常量
+    define('HI\\APP_URL_PREFIX', {{default .Env.HI_PHP_APP_URL_PREFIX "'https://dev.happyin.com.cn:9969'"}});
+    define('HI\\APP_URL', HI\APP_URL_PREFIX . "/");
+  
+    //ios下载地址
+    define('HI\\Config\\IOS_DOWNLOAD_URL', 'https://geo.itunes.apple.com/cn/app/kuai-le-yin-happyin-zhong/id1112861646?mt=8');
+   
+    //后台
+    //OSAdmin常量
+    define('Console\\ADMIN_URL', {{default .Env.HI_PHP_ADMIN_URL "'https://dev.happyin.com.cn:9969/'"}});
+    define('Console\\ADMIN_TITLE', {{default .Env.HI_PHP_ADMIN_TITLE "'快乐印管理后台'"}});
+    define('Console\\COMPANY_NAME', {{default .Env.HI_PHP_COMPANY_NAME "'北京快乐印科技有限公司'"}});
+    //COOKIE加密密钥
+    define('Console\\ADMIN\\ENCRYPT_KEY', {{default .Env.HI_PHP_ADMIN_COOKIE_KEY "'comeonusyoubest!'"}});
+   
+    // Tencent COS credentials and configs
+    define('HI\\Config\\QCloud\\APP_ID', {{default .Env.HI_PHP_QCLOUD_APP_ID "'10041765'"}});
+    define('HI\\Config\\QCloud\\SECRET_ID', {{default .Env.HI_PHP_QCLOUD_SECRETID "'AKIDT7Fz4ilhmbVfnN7CiQkj8FM8mdQAiO8G'"}});
+    define('HI\\Config\\QCloud\\SECRET_KEY', {{default .Env.HI_PHP_QCLOUD_SECRET_KEY "'ucAMkJbE71jbFTecX61ZFgSC42fppJqS'"}});
+    define('HI\\Config\\QCloud\\PUBLIC_BUCKET', {{default .Env.HI_PHP_QCLOUD_BUCKET "'devel'"}});
+    define('HI\\Config\\QCloud\\PRIVATE_BUCKET', {{default .Env.HI_PHP_QCLOUD_BUCKET "'devel'"}});
+    define('HI\\Config\\QCloud\\COS_USER_AGENT', {{default .Env.HI_PHP_QCLOUD_COS_USER_AGENT "'tencent-httputils/1.1'"}});
+    define('HI\\Config\\QCloud\\COS_UPLOAD', {{default .Env.HI_PHP_QCLOUD_COS_UPLOAD "'http://web.file.myqcloud.com/files/v1/'"}});
+    define('HI\\Config\\QCloud\\COS_SIGN_EXPIRE', {{default .Env.HI_PHP_QCLOUD_COS_SIGN_EXPIRE "20"}});
+    define('HI\\Config\\QCloud\\IMAGE\\DOMAIN', {{default .Env.HI_PHP_CONFIG_QCLOUD_IMAGE_DOMAIN "'http://hipubdev-10006628.file.myqcloud.com'"}});
+
+    //过期时间
+    define('HI\\Config\\SESSION_EXPIRE', {{default .Env.HI_PHP_SESSION_EXPIRE "0"}});    //session_key 过期时间
+    define('HI\\Config\\CAPTCHA_ATTEMPTS_EXPIRE', {{default .Env.HI_PHP_CAPTCHA_ATTEMPTS_EXPIRE "86400"}});    //验证码失败次数
+    define('HI\\Config\\SIGN_EXPIRE', {{default .Env.HI_PHP_SIGN_EXPIRE "1"}});    //sign_key 过期时间
+    define('HI\\Config\\INVITE_EXPIRE', {{default .Env.HI_PHP_INVITE_EXPIRE "31536000"}});    //小组邀请过期时间
+
+    //可解绑数
+    define('HI\\User\\UNLINK_NUM', 2);
+
+    //MiPush configuration
+    define('HI\\MI_PUSH\\IOS_SECRET', {{default .Env.HI_PHP_MI_PUSH_IOS_SECRET "'4g0cd6598ZtKx/v/kqnGEw=='"}});
+    define('HI\\MI_PUSH\\IOS_BUNDLE_ID', {{default .Env.HI_PHP_MI_PUSH_IOS_BUNDLE_ID "'com.happyin.print'"}});
+    define('HI\\MI_PUSH\\ANDROID_SECRET', {{default .Env.HI_PHP_MI_PUSH_ANDROID_SECRET "'+IGn0/UOCFQ5TIoaUW4/Kg=='"}});
+    define('HI\\MI_PUSH\\ANDROID_BUNDLE_ID', {{default .Env.HI_PHP_MI_PUSH_ANDROID_BUNDLE_ID "'com.happyin.print'"}});
+    define('HI\\Push\\PUSH_EMOJI_JSON', {{default .Env.HI_PHP_PUSH_EMOJI_JSON "'push.emoji_unicode'"}});     //emoji json
+    define('HI\\MI_PUSH\\COUNT',{{default .Env.HI_PHP_PUSH_EMOJI_JSON "'push_count_'"}});
+    //验证码开关
+    define('HI\\Captcha\\SEND', {{default .Env.HI_PHP_CAPTCHA_SEND "1"}});                 //发送验证码开关；1-开0-关
+    define('HI\\Captcha\\VERIFY', {{default .Env.HI_PHP_CAPTCHA_VERIFY "1"}});                 //验证验证码开关；1-开0-关
+
+    // Cross Domain Access Control
+    define('HI\\Config\\ALLOWED_ORIGIN', {{default .Env.HI_PHP_ALLOWED_ORIGIN "'happyin.com.cn'"}});
+
+    define('HI\\Config\\RabbitMQ\\HOSTNAME', {{default .Env.HI_PHP_RABBITMQ_HOSTNAME "'10.141.51.6'"}});
+    define('HI\\Config\\RabbitMQ\\PORT', {{default .Env.HI_PHP_RABBITMQ_PORT "5672"}});
+    define('HI\\Config\\RabbitMQ\\USERNAME', {{default .Env.HI_PHP_RABBITMQ_USERNAME "'devel'"}});
+    define('HI\\Config\\RabbitMQ\\PASSWORD', {{default .Env.HI_PHP_RABBITMQ_PASSWORD "'431fb46091d07622b56dba8f3f6f316f5e18526a99b3d4b7438bd9069745246d'"}});
+    define('HI\\Config\\RabbitMQ\\VHOST', {{default .Env.HI_PHP_RABBITMQ_VHOST "'/devel'"}});
+   
+    //数据库表
+    define('HI\\TableName\\CUSTOMER', HI\Config\Database\DBNAME . '.customer');
+    define('HI\\TableName\\CUSTOMER_CREDENTIAL', HI\Config\Database\DBNAME . '.customer_credential');
+    define('HI\\TableName\\SYSTEM_CODE', HI\Config\Database\DBNAME . '.system_code');
+    define('HI\\TableName\\CAPTCHA', HI\Config\Database\DBNAME . '.captcha');
+    define('HI\\TableName\\CUSTOMER_DEVICE', HI\Config\Database\DBNAME . '.customer_device');
+    define('HI\\TableName\\CUSTOMER_DEVICE_HISTORY', HI\Config\Database\DBNAME . '.customer_device_history');
+    define('HI\\TableName\\ADDRESS', HI\Config\Database\DBNAME . '.address');
+    define('HI\\TableName\\PRODUCT', HI\Config\Database\DBNAME . '.product');
+    define('HI\\TableName\\CART', HI\Config\Database\DBNAME . '.cart');
+    define('HI\\TableName\\PRODUCT_DESCRIPTION', HI\Config\Database\DBNAME . '.product_description');
+    define('HI\\TableName\\PRODUCT_IMAGE', HI\Config\Database\DBNAME . '.product_image');
+    define('HI\\TableName\\PRODUCT_TO_CATEGORY', HI\Config\Database\DBNAME . '.product_to_category');
+    define('HI\\TableName\\CATEGORY_DESCRIPTION', HI\Config\Database\DBNAME . '.category_description');
+    define('HI\\TableName\\COUPON', HI\Config\Database\DBNAME . '.coupon');
+    define('HI\\TableName\\COUPON_HISTORY', HI\Config\Database\DBNAME . '.coupon_history');
+    define('HI\\TableName\\COUPON_PRODUCT', HI\Config\Database\DBNAME . '.coupon_product');
+    define('HI\\TableName\\CUSTOMER_COUPON', HI\Config\Database\DBNAME . '.customer_coupon');
+    define('HI\\TableName\\ORDER', HI\Config\Database\DBNAME . '.order');
+    define('HI\\TableName\\ORDER_PRODUCT', HI\Config\Database\DBNAME . '.order_product');
+    define('HI\\TableName\\ORDER_TOTAL', HI\Config\Database\DBNAME . '.order_total');
+    define('HI\\TableName\\ORDER_COUPON', HI\Config\Database\DBNAME . '.order_coupon');
+    define('HI\\TableName\\ORDER_LOG', HI\Config\Database\DBNAME . '.order_log');
+    define('HI\\TableName\\SHARE_COUPON', HI\Config\Database\DBNAME . '.share_coupon');
+    define('HI\\TableName\\THIRD_USER', HI\Config\Database\DBNAME . '.third_user');
+    define('HI\\TableName\\USER_TO_SHARE', HI\Config\Database\DBNAME . '.user_to_share');
+    define('HI\\TableName\\COUPON_CATEGORY', HI\Config\Database\DBNAME . '.coupon_category');
+   
+    define('HI\\TableName\\CATEGORY', HI\Config\Database\DBNAME . '.category');
+    define('HI\\TableName\\PRODUCT_ATTRIBUTE', HI\Config\Database\DBNAME . '.product_attribute');
+    define('HI\\TableName\\PRODUCT_OPTION', HI\Config\Database\DBNAME . '.product_option');
+    define('HI\\TableName\\PRODUCT_OPTION_VALUE', HI\Config\Database\DBNAME . '.product_option_value');
+    define('HI\\TableName\\PRODUCT_RELATED', HI\Config\Database\DBNAME . '.product_related');
+    define('HI\\TableName\\PRINT_TYPE', HI\Config\Database\DBNAME . '.print');
+    define('HI\\TableName\\PRINT_TO_PRODUCT', HI\Config\Database\DBNAME . '.print_to_product');
+    define('HI\\TableName\\ORDER_ALINOTIFY', HI\Config\Database\DBNAME . '.order_alinotify');
+    define('HI\\TableName\\USER_RECORD_PLATFROMID', HI\Config\Database\DBNAME . '.user_record_platfromid');
+   
+    define('HI\\TableName\\FAILED_ASYNC_TASK', HI\Config\Database\DBNAME . '.failed_async_task');
+    define('HI\\TableName\\ORDER_SPLITTING', HI\Config\Database\DBNAME . '.order_splitting');
+    define('HI\\TableName\\ORDER_PICTURE', HI\Config\Database\DBNAME . '.order_picture');
+    define('HI\\TableName\\EXPRESS_CODE', HI\Config\Database\DBNAME . '.express_code');
+    define('HI\\TableName\\ORDER_WECHATNOTIFY', HI\Config\Database\DBNAME . '.order_wechatnotify');
+    define('HI\\TableName\\SHIPMENT', HI\Config\Database\DBNAME . '.shipment');
+    define('HI\\TableName\\ORDER_NUMBERING_SD', HI\Config\Database\DBNAME . '.order_numbering_sd');
+    define('HI\\TableName\\ORDER_NUMBERING_ZJ', HI\Config\Database\DBNAME . '.order_numbering_zj');
+    define('HI\\TableName\\ORDER_PICTURE_VERIFY', HI\Config\Database\DBNAME . '.order_picture_verify');//订单用户照片验证是否上传的数据表
+    
+    define('HI\\TableName\\PARTS', HI\Config\Database\DBNAME . '.parts');
+    define('HI\\TableName\\PARTS_PRODUCT', HI\Config\Database\DBNAME . '.parts_product');
+
+    define('HI\\TableName\\MANUFACTURE_ORDER', HI\Config\Database\DBNAME . '.manufacture_order');
+    define('HI\\TableName\\MANUFACTURE_ORDER_ARCHIVE', HI\Config\Database\DBNAME . '.manufacture_order_archive');
+    
+    //admin DB 
+    define('HI\\TableName\\SPREAD_CHANNEL_STAT', HI\Config\Database\DBNAME . '.spread_channel_stat');
+    define('HI\\TableName\\SPREAD_SUB_CHANNEL', HI\Config\Database\DBNAME . '.spread_sub_channel');
+    define('HI\\TableName\\SPREAD_MAIN_CHANNEL', HI\Config\Database\DBNAME . '.spread_main_channel');
+
+    define('HI\\TableName\\COST_PRICE', HI\Config\Database\DBNAME . '.cost_price');
+    define('HI\\TableName\\COST_LOG', HI\Config\Database\DBNAME . '.cost_log');
+    define('HI\\TableName\\STAT', HI\Config\Database\DBNAME . '.stat');
+    
+    //redis key
+    define('HI\\User\\DISTRIBUTOR', {{default .Env.HI_PHP_DISTRIBUTOR "'distributor'"}});    //渠道
+    define('HI\\User\\PHONE_MODEL', {{default .Env.HI_PHP_PHONE_MODEL "'phone.model'"}});    //手机型号
+    define('HI\\User\\CAPTCHA_PHONE', {{default .Env.HI_PHP_CAPTCHA_PHONE "'phone'"}});
+    define('HI\\User\\CAPTCHA_FAILED', {{default .Env.HI_PHP_CAPTCHA_FAILED "'captcha.failed.'"}});
+    define('HI\\User\\US_DEVID', {{default .Env.HI_PHP_US_DEVID "'us.devid.'"}});     //统计-新增用户
+    define('HI\\User\\SESSION', {{default .Env.HI_PHP_SESSION "'us.sessid.'"}});     //session
+    define('HI\\User\\CITY_CODE', {{default .Env.HI_PHP_DISTRIBUTOR "'city.'"}}); //城市编码
+    define('HI\\Coupon\\COUPON_TIMING', {{default .Env.HI_PHP_COUPON_TIMING "'timing_'"}}); //优惠券输入错误时间限制
+    define('HI\\Coupon\\COUPON_COUNT', {{default .Env.HI_PHP_COUPON_COUNT "'count_'"}}); //优惠券输错次数计数
+    define('HI\\SHARE\\HIDE_SHARE', {{default .Env.HI_PHP_HIDE_SHARE "'hide_share_'"}}); //终身免费banner隐藏
+    define('HI\\User\\WECHAT_TOKEN', {{default .Env.HI_PHP_REDIS_KEY_WECHAT_TOKEN "'token.'"}}); //微信token
+    define('HI\\Coupon\\AMOUNT', {{default .Env.HI_PHP_REDIS_KEY_AMOUNT "'amount_'"}}); //后台配置打包优惠券
+    define('HI\\Coupon\\CHECK_NUMS', {{default .Env.HI_PHP_REDIS_KEY_CHECK_NUMS "'check_nums_'"}});//检查优惠劵数量
+    define('HI\\Coupon\\RAND_RED_PACKET', {{default .Env.HI_PHP_RAND_RED_PACKET "'rand_red_packet_'"}});
+    define('HI\\Coupon\\CHECK_RECEIVE_OVER', {{default .Env.HI_PHP_CHECK_RECEIVE_OVER "'check_receive_over'"}});
+   
+    //Content Generate settings
+    define('HI\\Config\\CONTENT_GENERATOR_RESOLUTION_LIMIT', '[1960, 1200]');
+    define('HI\\Config\\CONTENT_GENERATOR_QUALITY', '[50, 75, 95]');
+    define('HI\\Config\\CONTENT_GENERATOR_MEMORY_LIMIT', '256M');
+    define('HI\\Config\\CONTENT_GENERATOR_FILE_SIZE_LIMIT', 26214400);
+    define('HI\\Config\\CONTENT_GENERATOR_RATE_LIMIT', 16);
+    define('HI\\Config\\CONTENT_GENERATOR_RATE_LIMIT_EXPIRE', 600);
+    define('HI\\Config\\CONTENT_GENERATOR_RATE_LIMIT_KEY_PREFIX', 'limit.content.');
+    define('HI\\Config\\CONTENT_GENERATOR_FORCE_JPEG', false);
+
+    //RabbitMQ queues
+    define('HI\\Config\\Queue\\ORDER_POST_PROCESS', {{default .Env.HI_PHP_QUEUE_ORDER_POST_PROCESS "'order-post-process'"}});
+    define('HI\\Config\\Queue\\ORDER_POST_PROCESS_RETRY', {{default .Env.HI_PHP_QUEUE_ORDER_POST_PROCESS_RETRY "10"}});
+
+    //Products
+    define('HI\\Config\\Product\\MEMORY_BOX_PRODUCT_ID', {{default .Env.HI_Config_Product_MEMORY_BOX_PRODUCT_ID "67" }});
+    define('HI\\Config\\Product\\PHOTO_CARDS_PRODUCT_ID', {{default .Env.HI_PHP_PRODUCT_PHOTO_CARDS_PRODUCT_ID "61"}});
+    define('HI\\Config\\Product\\LOMO_CARDS_PRODUCT_ID', {{default .Env.HI_PHP_PRODUCT_LOMO_CARDS_PRODUCT_ID "55"}});
+    define('HI\\Config\\Product\\FIVE_INCH', {{default .Env.HI_PHP_PRODUCT_FIVE_INCH "53" }});
+    define('HI\\Config\\Product\\SIX_INCH', {{default .Env.HI_PHP_PRODUCT_SIX_INCH "54" }});
+    define('HI\\Config\\Product\\PICTURE_ALBUM', {{default .Env.HI_PHP_PRODUCT_PICTURE_ALBUM "62" }});
+    define('HI\\Config\\Product\\GRID_ONE_BLACK', {{default .Env.HI_PHP_PRODUCT_GRID_ONE_BLACK "68"}});
+    define('HI\\Config\\Product\\GRID_ONE_WHITE', {{default .Env.HI_PHP_PRODUCT_GRID_ONE_WHITE "63"}});
+    define('HI\\Config\\Product\\GRID_TWO_BLACK', {{default .Env.HI_PHP_PRODUCT_GRID_TWO_BLACK "69"}});
+    define('HI\\Config\\Product\\GRID_TWO_WHITE', {{default .Env.HI_PHP_PRODUCT_GRID_TWO_WHITE "64"}});
+    define('HI\\Config\\Product\\GRID_THREE_BLACK', {{default .Env.HI_PHP_PRODUCT_GRID_THREE_BLACK "70"}});
+    define('HI\\Config\\Product\\GRID_THREE_WHITE', {{default .Env.HI_PHP_PRODUCT_GRID_THREE_WHITE "65"}});
+    define('HI\\Config\\Product\\GRID_FOUR_BLACK', {{default .Env.HI_PHP_PRODUCT_GRID_FOUR_BLACK "71"}});
+    define('HI\\Config\\Product\\GRID_FOUR_WHITE', {{default .Env.HI_PHP_PRODUCT_GRID_FOUR_WHITE "66"}});
+    define('HI\\Config\\Product\\BIG_POSTER', {{default .Env.HI_PHP_PRODUCT_BIG_POSTER "60"}});
+    define('HI\\Config\\Product\\PHOTO_GALLERY_THREE', {{default .Env.HI_PHP_PRODUCT_PHOTO_GALLERY_THREE "50"}});
+    define('HI\\Config\\Product\\PHOTO_GALLERY_FIVE', {{default .Env.HI_PHP_PRODUCT_PHOTO_GALLERY_FIVE "51"}});
+    define('HI\\Config\\Product\\PHOTO_GALLERY_SIX', {{default .Env.HI_PHP_PRODUCT_PHOTO_GALLERY_SIX "52"}});
+
+
+    define('HI\\Config\\Product\\PICTURE_ALBUM_SETTING', [4, 1, 42, 10.5, 10.5, 0]);
+    define('HI\\Config\\Product\\FRAMESET_SETTING', [
+        HI\Config\Product\BIG_POSTER => [6, 9, 50.71533333333333, 73.67693333333333, 7.45066666666667, 0.2032],
+        HI\Config\Product\GRID_ONE_BLACK => [1, 1, 20.32, 20.32, 10.32, 0],
+        HI\Config\Product\GRID_ONE_WHITE => [1, 1, 20.32, 20.32, 10.32, 0],
+        HI\Config\Product\GRID_TWO_BLACK => [2, 2, 30.48, 30.48, 10.145, 0.19],
+        HI\Config\Product\GRID_TWO_WHITE => [2, 2, 30.48, 30.48, 10.145, 0.19],
+        HI\Config\Product\GRID_THREE_BLACK => [3, 3, 30.48, 30.48, 6.7, 0.19],
+        HI\Config\Product\GRID_THREE_WHITE => [3, 3, 30.48, 30.48, 6.7, 0.19],
+        HI\Config\Product\GRID_FOUR_BLACK => [4, 4, 30.48, 30.48, 4.9775, 0.19],
+        HI\Config\Product\GRID_FOUR_WHITE => [4, 4, 30.48, 30.48, 4.9775, 0.19]
+    ]);
+
+    define('HI\\Config\\Product\\THANKS_CARD_SETTING', [
+        HI\Config\Product\FIVE_INCH => ["127-89",
+            [["x" => 385, "y" => 340, "width" => 288, "height" => 99, "fontSize" => 84],
+             ["x" => 385, "y" => 340, "width" => 288, "height" => 99, "fontSize" => 84],
+             ["x" => 385, "y" => 340, "width" => 288, "height" => 99, "fontSize" => 74],
+             ["x" => 385, "y" => 340, "width" => 288, "height" => 99, "fontSize" => 54],
+            ],
+            [["x" => 498, "y" => 497, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 506, "y" => 497, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 516, "y" => 497, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 526, "y" => 497, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 534, "y" => 497, "width" => 31, "height" => 24, "fontSize" => 18],
+            ]],
+        HI\Config\Product\SIX_INCH => ["1524-1016",
+            [["x" => 455, "y" => 394, "width" => 288, "height" => 99, "fontSize" => 95],
+             ["x" => 470, "y" => 394, "width" => 288, "height" => 99, "fontSize" => 95],
+             ["x" => 470, "y" => 394, "width" => 288, "height" => 99, "fontSize" => 80],
+             ["x" => 480, "y" => 394, "width" => 288, "height" => 99, "fontSize" => 60],
+            ],
+            [["x" => 588, "y" => 571, "width" => 31, "height" => 24, "fontSize" => 20],
+             ["x" => 598, "y" => 571, "width" => 31, "height" => 24, "fontSize" => 20],
+             ["x" => 610, "y" => 571, "width" => 31, "height" => 24, "fontSize" => 20],
+             ["x" => 620, "y" => 571, "width" => 31, "height" => 24, "fontSize" => 20],
+             ["x" => 632, "y" => 571, "width" => 31, "height" => 24, "fontSize" => 20],
+            ]],
+        HI\Config\Product\LOMO_CARDS_PRODUCT_ID => ["84-58",
+            [["x" => 295, "y" => 384, "width" => 288, "height" => 99, "fontSize" => 85],
+             ["x" => 295, "y" => 384, "width" => 288, "height" => 99, "fontSize" => 85],
+             ["x" => 330, "y" => 382, "width" => 288, "height" => 99, "fontSize" => 75],
+             ["x" => 340, "y" => 382, "width" => 288, "height" => 99, "fontSize" => 56],
+            ],
+            [["x" => 460, "y" => 531, "width" => 31, "height" => 24, "fontSize" => 16],
+             ["x" => 464, "y" => 531, "width" => 31, "height" => 24, "fontSize" => 16],
+             ["x" => 467, "y" => 531, "width" => 31, "height" => 24, "fontSize" => 16],
+             ["x" => 472, "y" => 531, "width" => 31, "height" => 24, "fontSize" => 16],
+             ["x" => 475, "y" => 531, "width" => 31, "height" => 24, "fontSize" => 16],
+            ]], 
+        HI\Config\Product\PHOTO_CARDS_PRODUCT_ID => ["87-87",
+            [["x" => 355, "y" => 392, "width" => 288, "height" => 99, "fontSize" => 85],
+             ["x" => 365, "y" => 392, "width" => 288, "height" => 99, "fontSize" => 85],
+             ["x" => 370, "y" => 390, "width" => 288, "height" => 99, "fontSize" => 75],
+             ["x" => 370, "y" => 390, "width" => 288, "height" => 99, "fontSize" => 56],
+            ],
+            [["x" => 502, "y" => 545, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 507, "y" => 545, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 512, "y" => 545, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 517, "y" => 545, "width" => 31, "height" => 24, "fontSize" => 18],
+             ["x" => 520, "y" => 545, "width" => 31, "height" => 24, "fontSize" => 18],
+            ]] 
+    ]);
+    define('Hi\\Config\\Product\\FILE_NAME_TEMPLATE', [
+        HI\Config\Product\FIVE_INCH => '${date}/照片类/${orderNumber}/富士金冠绒面5寸/5寸_${photoCount}张_富士金冠绒面_普通冲印(${instance}-${index}).jpg',
+        HI\Config\Product\SIX_INCH => '${date}/照片类/${orderNumber}/富士金冠绒面6寸/6寸_${photoCount}张_富士金冠绒面_普通冲印(${instance}-${index}).jpg',
+        HI\Config\Product\MEMORY_BOX_PRODUCT_ID => '${date}/照片类/${orderNumber}/大尺寸及证件照/37.2乘以37.2/24寸(37.2乘以37.2)记忆盒子${uuid}-1张.jpg',
+        HI\Config\Product\BIG_POSTER => '${date}/照片类/${orderNumber}/大尺寸及证件照/50.8乘以73.7/30寸(50.8乘以73.7)海报${uuid}-1张.jpg',
+        HI\Config\Product\GRID_ONE_BLACK => '${date}/照片类/${orderNumber}/大尺寸及证件照/20.3乘以20.3/10寸(20.3乘以20.3)8寸方格1x1${uuid}-1张.jpg',
+        HI\Config\Product\GRID_TWO_BLACK => '${date}/照片类/${orderNumber}/大尺寸及证件照/30.5乘以30.5/18寸(30.5乘以30.5)12寸方格2x2${uuid}-1张.jpg',
+        HI\Config\Product\GRID_THREE_BLACK => '${date}/照片类/${orderNumber}/大尺寸及证件照/30.5乘以30.5/18寸(30.5乘以30.5)12寸方格3x3${uuid}-1张.jpg',
+        HI\Config\Product\GRID_FOUR_BLACK => '${date}/照片类/${orderNumber}/大尺寸及证件照/30.5乘以30.5/18寸(30.5乘以30.5)12寸方格4x4${uuid}-1张.jpg',
+        HI\Config\Product\GRID_ONE_WHITE => '${date}/照片类/${orderNumber}/大尺寸及证件照/20.3乘以20.3/10寸(20.3乘以20.3)8寸方格1x1${uuid}-1张.jpg',
+        HI\Config\Product\GRID_TWO_WHITE => '${date}/照片类/${orderNumber}/大尺寸及证件照/30.5乘以30.5/18寸(30.5乘以30.5)12寸方格2x2${uuid}-1张.jpg',
+        HI\Config\Product\GRID_THREE_WHITE => '${date}/照片类/${orderNumber}/大尺寸及证件照/30.5乘以30.5/18寸(30.5乘以30.5)12寸方格3x3${uuid}-1张.jpg',
+        HI\Config\Product\GRID_FOUR_WHITE => '${date}/照片类/${orderNumber}/大尺寸及证件照/30.5乘以30.5/18寸(30.5乘以30.5)12寸方格4x4${uuid}-1张.jpg',
+        HI\Config\Product\LOMO_CARDS_PRODUCT_ID => '${date}/定制类/${orderNumber}/模板1-LOMO${uuid}/LOMO-${uuid}-${index}.jpg',
+        HI\Config\Product\PHOTO_CARDS_PRODUCT_ID => '${date}/定制类/${orderNumber}/模板1-照片卡${uuid}/照片卡-${uuid}-${index}.jpg',
+        HI\Config\Product\PICTURE_ALBUM => '${date}/定制类/${orderNumber}/自由DIY-迷你手风琴画册${uuid}_共${count}件/自由DIY-迷你手风琴画册__第${pageIndex}幅($side)_共2.jpg'
+    ]);
+    define('HI\\Config\\Product\\PRINT_SETTING', [
+        HI\Config\Product\FIVE_INCH => 0, HI\Config\Product\SIX_INCH => 0, 
+        HI\Config\Product\LOMO_CARDS_PRODUCT_ID => 0.0662100456621, 
+        HI\Config\Product\PHOTO_CARDS_PRODUCT_ID => 0.0599128540305
+    ]);
+    define('HI\\Config\\Product\\LOMO_CARDS_SETTING', {{default .Env.HI_PHP_PRODUCT_LOMO_CARDS_SETTING "[685, 992, 300]"}});
+    define('HI\\Config\\Product\\PHOTO_CARDS_SETTING', {{default .Env.HI_PHP_PRODUCT_PHOTO_CARDS_SETTING "[1028, 1028, 300]"}});
+    define('HI\\Config\\Product\\POST_PROCESS_QUALITY', {{default .Env.HI_CONFIG_PRODUCT_POST_PROCESS_QUALITY "75" }});
+    define('HI\\Config\\Product\\MemoryBox\\SETTING', {{default .Env.HI_CONFIG_PRODUCT_MEMORYBOX_SETTING "[2930, 2930]" }});
+    define('HI\\Config\\Order\\COMPLETE_STATUS_ID', 5);
+    define('HI\\Config\\Order\\PROCESSED_STATUS_ID', 15);
+    define('HI\\Config\\Order\\PRODUCING_STATUS_ID', 17);
+    define('HI\\Config\\Product\\SET_UNIT', {{default .Env.HI_PHP_PRODUCT_LOMO_CARDS_PRODUCT_ID "'50'"}});//一套50张
+
+    //常用地区
+    define('HI\\Config\\COMMON_CITY', ['上海市', '浙江省', '江苏省']);
+    define('HI\\Config\\ORDER_COUNT', '100');
+    define('HI\\Config\\DROP_DOWN',[
+        'fe36bffc-bac9-4f88-91ac-9258cfb92605',
+        'e90f8736-62d2-4e25-bf5c-0e159d7af2c8',
+        '5b664d04-7677-4729-b8cd-62bfb30e105b',
+        '0564fd13-af69-422d-a4a5-bd2cea53ddfe',
+        'ceb97ffe-05ac-45bc-8f9c-ef80e93ed2b9',
+        'b314065e-82e3-4ab0-abaf-cbecb5af037f',
+        '6295437e-fb6d-4fc3-96b5-bf9f47b3062d',
+        '08130efc-30e1-4a03-8ab9-b9026179edc7',
+        '55e54a33-3bd9-49f8-aa0e-433020c900b3',
+        'a199453f-10a5-4261-964d-7c48b8be8d6d',
+        '96157c82-457c-46f9-a3cd-d99560052000',
+        'd6686881-1407-43ec-8edf-91f2c16341f0',
+    ]);
+   
+    //PAY
+    define('HI\\Config\\Pay\\WX_PARTNER_ID', "1338979901");
+    define('HI\\Config\\Pay\\WX_PARTNER_KEY', "happyinzxcvbnm52013105718008zhuX");
+    define('HI\\Config\\Pay\\WX_APP_ID', "wxe63a6af33be57b5d");
+    define('HI\\Config\\Pay\\WX_APP_SECRET', "bc88d2d1352bff72c3c3e66628c2f89d");
+    define('HI\\Config\\Pay\\WX_APP_CALLBACK', "Catalog/Pay/wechatNotify");
+   
+    define('HI\\Config\\Pay\\ALI_PARTNER_ID', "2088221719922971");
+    define('HI\\Config\\Pay\\ALI_PARTNER_SELLER', "zhanghao@happyin.com.cn");
+    define('HI\\Config\\Pay\\ALI_PRIVATE_KEY', "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJ+RhsIGGEDcPkotM/Ge+CMmqkwMgBcw4MNDBPOhvJzmkaA6wRy6Arjifacx7P03Rzs/Ct9ed0EimiM1famEcHLj+3keM7Uu0AxaQ+6KJwosjVPCRdLVzIQ4t6B02ZXS6jqiPC4oxpF232/rTWeunAQdsVnjN6QGPR1bAt6DuhbbAgMBAAECgYArp9rgdl5oUFlSXe+aKU3mAAwTZlAdCChWA531MciyfHpXBfwTaeiYwI50EbquxFLeqK7G0cd6sIbPHzFUEYHZ3l2V038Hy7PAkm+GfcK8XC2O5p1gQOU4gAr6MSE4FOwIaI20au4kjCldUAqe0O1taShwt5KX7ImBx6vstt2I8QJBAM3PUXuVkBE72/cHTOApVVR9O1d3SBfUdbUHpcBihnchwohA24uoHH/kF04c/iINL7YAhc+yw3nUozdia5/AWm8CQQDGe11yZ2K6U5BjdsHbNARqRKaQYcL+FWROPS7RM0fPi6B/x8tzl15JkMjYeKU8ir3PLY+DqpPcXyKK6ot3LPBVAkBiaz3gB4m5dBKgcxFEMP/pQ2nZTeVf3+3aACo3ceYzmiVY2wsiIeZfEkhCxoKQ7hVex6k1xZrM6+6RUbN91ZJpAkAsA41cYkrFcORy+hHRDz7vZdvd5p/8AjhlFTI9l/aTsq3byC14q5dwDthLEK3ruASRXdQWaYwycTJSxeI5glClAkEArZvhJwZHVKSYRJoqumLCk4JWRETKQT9sqg2JHtfVjWRTRxvGzuRe8kztf5Z1PmI6O9LxvzfZ7kx+YJgvtXpUew==");
+    define('HI\\Config\\Pay\\ALI_APP_CALLBACK', "Catalog/Pay/aliNotify");
+    
+    define('HI\\Config\\Pay\\CHECK', 1);//1:验证支付金额 0:不验证
+     //COUPON
+     define('HI\\Config\\Coupon\\RECEIVE_COUNT_LIMIT', {{default .Env.HI_PHP_COUPON_RECEIVE_COUNT_LIMIT "5" }});
+     define('HI\\Config\\Coupon\\SEND_COUPON_ID', {{default .Env.HI_PHP_COUPON_SEND_COUPON_ID "1" }});
+     define('HI\\Config\\Coupon\\RAND_COUNT', {{default .Env.HI_PHP_COUPON_RAND_COUNT "100" }});
+     define('HI\\Config\\Coupon\\TYPE\\SHARE', {{default .Env.HI_PHP_COUPON_TYPE_SHARE "2" }});
+     define('HI\\Config\\Coupon\\ORDER_SHIPPING', {{default .Env.HI_PHP_COUPON_ORDER_SHIPPING "8" }});
+     define('HI\\Config\\Coupon\\REDIRECT_URI', {{default .Env.HI_PHP_COUPON_REDIRECT_URI "'http://staging.happyin.com.cn/'" }});
+     define('HI\\Config\\Coupon\\LIMIT_IP', {{default .Env.HI_PHP_COUPON_LIMIT_IP "20" }});
+     define('HI\\Config\\Coupon\\RAND_DISCOUNT_VALUE', {{default .Env.HI_COUPON_RAND_DISCOUNT_VALUE "[2,6]" }});
+     define('HI\\Config\\Coupon\\RAND_DISCOUNT_FLAG', {{default .Env.HI_COUPON_RAND_DISCOUNT_FLAG "0" }});
+     
+     //ADMIN EXPRESS INPUT
+     define('HI\\Config\\EXPRESS\\ADMIN_ORDER_NUMBER', {{default .Env.HI_EXPRESS_ADMIN_ORDER_NUMBER "0" }});
+     define('HI\\Config\\EXPRESS\\ADMIN_SPLITTING_ID', {{default .Env.HI_EXPRESS_ADMIN_SPLITTING_ID "2" }});
+     define('HI\\Config\\EXPRESS\\ADMIN_SPLITTING_COMPANY', {{default .Env.HI_EXPRESS_ADMIN_SPLITTING_COMPANY "1" }});
+
+     //CLIENT_VERSION
+     define('HI\\Config\\CLIENT\\VERSION_DIFF', {{default .Env.HI_CLIENT_VERSION_DIFF "3" }});
+     
+    //页面设置
+    define('Console\\ADMIN\\DEBUG' ,false);
+    define('Console\\ADMIN\\PAGE_SIZE', 25 );
+    define('Console\\ADMIN\\SUCCESS', '操作成功');
+    define('Console\\ADMIN\\ERROR', '操作失败，服务器异常');
+    define('Console\\ADMIN\\BE_PAUSED', '您被封停，请联系管理员');
+    define('Console\\ADMIN\\USER_OR_PWD_WRONG', '用户名或密码错误');
+    define('Console\\ADMIN\\GROUP_NOT_EXIST', '账户组不存在');
+    define('Console\\ADMIN\\NEED_PARAM', '缺少必填项');
+    define('Console\\ADMIN\\NAME_CONFLICT', '名称冲突');
+    define('Console\\ADMIN\\CAN_NOT_DELETE_SYSTEM_MODULE', '不能删除系统模块');
+    define('Console\\ADMIN\\HAVE_MENU', '模块下有菜单，请先删除菜单');
+    define('Console\\ADMIN\\MENU_URL_OR_MENU_NAME_CONFLICT', '模块名或模块地址已存在');
+    define('Console\\ADMIN\\MENU_URL_CONFLICT', '菜单链接地址冲突');
+    define('Console\\ADMIN\\CAN_NOT_DELETE_SYSTEM_MENU', '不能删除系统菜单');
+    define('Console\\ADMIN\\CAN_NOT_DELETE_SHORTCUT_MENU', '不能删除快捷菜单的链接地址');
+    define('Console\\ADMIN\\NOT_MODIFY_SHORTCUT_MENU', '不能修改快捷菜单的链接地址');
+    define('Console\\ADMIN\\CAN_NOT_DO_FOR_SUPER_GROUP', '不能对初始的超级管理员组进行此操作');
+    define('Console\\ADMIN\\HAVE_USER', '账号组被使用，不能删除；若要删除，请先将属于该组的用户划拨到其它账号组');
+    define('Console\\ADMIN\\SUCCESS_NEED_LOGIN', '操作成功，部分功能需要用户重新登录才可使用');
+    define('Console\\ADMIN\\PWD_UPDATE_SUCCESS', '密码修改成功');
+    define('Console\\ADMIN\\OLD_PWD_WRONG', '原密码错误');
+    define('Console\\ADMIN\\MENU_AND_MODULE_NOT_SAME', '您搜索的菜单不存在或不在所选模块下');
+    define('Console\\ADMIN\\MENU_ID_NOT_EXIST', '不存在当前ID的菜单列表');
+    define('Console\\ADMIN\\QUICKNOTE_NOT_OWNER', '没有权限删除当前便签');
+    define('Console\\ADMIN\\SYSMENU_NOT_CAN_MOVE', '系统菜单不能转移到其它模块');
+    define('Console\\ADMIN\\NO_FILES_UPLOAD', '请先上传您要更换的封面图');
+    define('Console\\ADMIN\\DEFAULT_PIC_DEL_FAILED', '默认封面图删除失败!');
+    define('Console\\ADMIN\\PUSH_FAILED', '推送失败!');
+    define('Console\\ADMIN\\UPLOAD_FAILED', '上传新图失败');
+    define('Console\\ADMIN\\EVENT_NO_PICTURE', '该活动下暂无照片哦！');
+    define('Console\\ADMIN\\CHANNEL_DELETE_FAILED', '主渠道删除失败！');
+    define('Console\\ADMIN\\MAIN_CHANNEL_HAVE_SUB_CHANNEL', '主渠道下有分渠道,不允许删除！');
+    define('Console\\ADMIN\\MAIN_CHANNEL_ADD_FAILED', '主渠道添加失败！');
+    define('Console\\ADMIN\\SUB_CHANNEL_ADD_FAILED', '分渠道添加失败！');
+    define('Console\\ADMIN\\SUB_CHANNEL_NAME_CONFILCT', '分渠道名称已存在！');
+    define('Console\\ADMIN\\SUB_CHANNEL_MODIFY_FAILED', '分渠道信息修改失败！');
+    define('Console\\ADMIN\\CHANNEL_STAT_SUM_FAILED', '结算数据有异常！');
+    define('Console\\ADMIN\\PRICE_CAN_NOT_EMPTY', '单价不能为空！');
+    define('Console\\ADMIN\\BOTTOM_RIGHT_NAME', 'Happyin.');
+    define('Console\\ADMIN\\OFFICIAL_WEBSITE', 'http://www.happyin.com.cn');
+
+    //Console config
+    define('HI\\Config\\Console\\AGENT_SERIES', {{default .Env.HI_Console_AGENT_SERIES "5" }});
+    define('HI\\Config\\Console\\ADMIN_ID', {{default .Env.HI_Console_ADMIN_ID "1" }});
+
+    //opencart Console
+    define('HI\\Config\\Console\\PERMIT_EDIT', {{default .Env.HI_Console_PERMIT_EDIT "[1]" }});
+
+    define('HI\\Config\\VERIFY_WHEN_COMMIT', {{ default .Env.HI_VERIFY_WHEN_COMMIT "true" }});
+    define('HI\\Config\\PUBLIC_ACTIONS', [
+        "/manufacture/order/pull" => 1,
+        "/catalog/user/register" => 1,
+        "/catalog/user/login" => 1,
+        "/catalog/user/recordplatfromid" => 1,
+        "/catalog/user/webregister" => 1,
+        "/catalog/user/getjssdk" => 1,
+        "/catalog/system/sysinfo" => 1,
+        "/catalog/pay/wechatnotify" => 1,
+        "/catalog/pay/alinotify" => 1,
+        "/catalog/express/receive" => 1,
+        "/catalog/express/traces" => 1,
+        "/catalog/advert/adclick" => 1,
+        "/catalog/advert/active" => 1,
+        "/catalog/catalog/category" => 1,
+        "/catalog/catalog/products" => 1,
+        "/catalog/catalog/detail" => 1,
+        "/catalog/catalog/redirection" => 1,
+        "/catalog/catalog/share" => 1,
+        "/catalog/coupon/mycoupon" => 1,
+        "/catalog/user/verifyshare" => 1,
+        "/catalog/system/getdomaininfo" => 1,
+        "/catalog/catalog/content" => 1,
+        "/catalog/stat/adclick" => 1,
+    ]);
+    
+    //Route
+    define('HI\\Config\\PS', "ps");
+    define('HI\\Config\\OS', "os");
+    define('HI\\Config\\ASR', "as");
+    define('HI\\Config\\BS', "bs");
+    define('HI\\Config\\S', "s");
+    define('HI\\Config\\CONSOLE', "console");
+    define('HI\\Config\\P', "profile");
+    define('HI\\Config\\A', "admin");
+    define('HI\\Config\\MANUFACTURE', ["2ea02298a072134cca710c7ac8d935f2321e8e08240b54825090b4b2a452f645" => 0, "e36e0dea8029e1472ffb2ef0b4d52c104194fc7b9b8543335cc28836f53dd986" => 1]);
+?>

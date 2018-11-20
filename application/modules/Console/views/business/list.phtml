@@ -1,0 +1,312 @@
+<?php 
+include(dirname(__DIR__).'/header.phtml');
+include(dirname(__DIR__)."/menu/navibar.phtml");
+include(dirname(__DIR__)."/menu/sideBar.phtml");
+?>
+<style>
+    .table .text-center{ text-align: center; vertical-align: middle; word-break: keep-all; word-wrap: normal;}
+    .todetails { cursor: pointer;}
+</style>
+
+<div class="agentLV1-box">
+	<a href="#page-agent-lv1" class="block-heading" data-toggle="collapse">一级代理</a>
+	<div id="page-agent-lv1" class="block-body collapse in" style="overflow-x:auto;">
+	<table class="table table-bordered table-hover" style="width:auto;">
+		<thead class="agentLV1-thead">
+			<tr>
+				<td class="text-center" data-path="">数量</td>
+				<td class="text-center">一级代理</td>
+				<td class="text-center">签约日期</td>
+				<td class="text-center">旗下代理</td>
+                <!--总计 -->
+				<td class="text-center">总销售额</td>
+				<td class="text-center">上月销售</td>
+				<td class="text-center">本月销售</td>
+				<td class="text-center">今日销售</td>
+				<td class="text-center">用户总计</td>
+				<td class="text-center">上月新增</td>
+				<td class="text-center">本月新增</td>
+				<td class="text-center">今日新增</td>
+				<!--个人-->
+				<td class="text-center">个人销售额</td>
+				<td class="text-center">个人上月销售</td>
+				<td class="text-center">个人本月销售</td>
+				<td class="text-center">个人今日销售</td>
+				<td class="text-center">新增用户总计</td>
+				<td class="text-center">上月新增</td>
+				<td class="text-center">本月新增</td>
+				<td class="text-center">今日新增</td>
+				<!--旗下-->
+				<td class="text-center">代理总销售额</td>
+				<td class="text-center">代理上月销售</td>
+				<td class="text-center">代理本月销售</td>
+				<td class="text-center">代理今日销售</td>
+				<td class="text-center">代理新增总计</td>
+				<td class="text-center">代理上月新增</td>
+				<td class="text-center">代理本月新增</td>
+				<td class="text-center">代理今日新增</td>
+			</tr>
+		</thead>
+		<tbody class="agentLV1-tbody"></tbody>
+	</table>
+	</div>
+</div>
+
+<div class="agentLV2-box">
+	<a href="#page-agent-lv2" class="block-heading" data-toggle="collapse">二级代理</a>
+<div id="page-agent-lv2" class="block-body collapse in" style="overflow-x:auto;">
+	<table class="table table-bordered table-hover" style="width:auto;">
+		<thead class="agentLV2-thead">
+		<tr>
+			<td class="text-center">数量</td>
+			<td class="text-center">二级代理</td>
+			<td class="text-center">签约日期</td>
+			<td class="text-center">所属一级代理</td>
+			<td class="text-center">旗下代理</td>
+			<!--总计 -->
+			<td class="text-center">总销售额</td>
+			<td class="text-center">上月销售</td>
+			<td class="text-center">本月销售</td>
+			<td class="text-center">今日销售</td>
+			<td class="text-center">用户总计</td>
+			<td class="text-center">上月新增</td>
+			<td class="text-center">本月新增</td>
+			<td class="text-center">今日新增</td>
+			<!--个人-->
+			<td class="text-center">个人销售额</td>
+			<td class="text-center">个人上月销售</td>
+			<td class="text-center">个人本月销售</td>
+			<td class="text-center">个人今日销售</td>
+			<td class="text-center">新增用户总计</td>
+			<td class="text-center">上月新增</td>
+			<td class="text-center">本月新增</td>
+			<td class="text-center">今日新增</td>
+			<!--旗下-->
+			<td class="text-center">代理总销售额</td>
+			<td class="text-center">代理上月销售</td>
+			<td class="text-center">代理本月销售</td>
+			<td class="text-center">代理今日销售</td>
+			<td class="text-center">代理新增总计</td>
+			<td class="text-center">代理上月新增</td>
+			<td class="text-center">代理本月新增</td>
+			<td class="text-center">代理今日新增</td>
+		</tr>
+		</thead>
+		<tbody class="agentLV2-tbody"></tbody>
+	</table>
+	</div>
+</div>
+
+<div class="agentLV3-box">
+<a href="#page-agent-lv3" class="block-heading" data-toggle="collapse">三级代理</a>
+<div id="page-agent-lv3" class="block-body collapse in" style="overflow-x:auto;">
+	<table class="table table-bordered table-hover" style="width:auto;">
+		<thead class="agentLV3-thead">
+		<tr>
+			<td class="text-center">数量</td>
+			<td class="text-center">三级代理</td>
+			<td class="text-center">签约日期</td>
+			<td class="text-center">所属二级代理</td>
+			<!--总计 -->
+			<td class="text-center">总销售额</td>
+			<td class="text-center">上月销售</td>
+			<td class="text-center">本月销售</td>
+			<td class="text-center">今日销售</td>
+			<td class="text-center">用户总计</td>
+			<td class="text-center">上月新增</td>
+			<td class="text-center">本月新增</td>
+			<td class="text-center">今日新增</td>
+		</tr>
+		</thead>
+		<tbody class="agentLV3-tbody"></tbody>
+	</table>
+	</div>
+</div>
+
+<script>
+	var PathArr = [
+		'total.sum.total',					//sumTotalPath，总销售路径
+		'total.last_month.total',			//lastMonthTotalPath，上月销售路径
+		'total.current_month.total',		//thisMonthTotalPath，本月销售路径
+		'total.current_day.total',			//todayTotalPath，今天销售路径
+		'total.sum.new_user',				//sumNewUserPath，总新增用户路径
+		'total.last_month.new_user',		//lastMonthNewUserPath，上月新增用户路径
+		'total.current_month.new_user',		//thisMonthNewUserPath，本月新增用户路径
+		'total.current_day.new_user'		//todayNewUserPath，今天新增用户路径
+	];
+
+	function getPersonalData(data,parentid){
+		var json = {};
+		var arr = [];
+		var uidArr = [];
+		var forReArr = [0,0,0,0,0,0,0,0];
+		for(var i=0; i<data.length; i++) {
+			if(data[i].parent_user_id == parentid) {
+				arr.push(data[i]);
+			}
+		}
+		
+		for(var i=0; i<arr.length; i++){
+			uidArr.push(arr[i].user_id);
+			for(var j=0;j<PathArr.length;j++){
+				var cacheNum = eval('arr['+ i +'].' + PathArr[j]);
+				cacheNum = cacheNum == null ? 0 : parseFloat(cacheNum);
+				forReArr[j] += cacheNum;
+			}
+		}
+		
+		json['arr'] = forReArr;
+		json['uidArr'] = uidArr;
+		return json;
+	}
+
+	function toDetails(){
+		$('.todetails').on('click',function(){
+			var uid = $(this).attr('data-userid');
+			location.href = location.protocol + '//' + location.host + '/Console/Business/index?user_id=' + uid;
+		})
+	}
+
+	$.ajax({
+		url: location.protocol + '//' + location.host + '/Console/Business/statList',
+		dataType: 'json',
+		data: {},
+		success: function(d){
+			console.log(d);
+			var agentLV1 = d[1];	//一级代理商
+			var agentLV2 = d[2];	//二级代理商
+			var agentLV3 = d[3];	//三级代理商
+			//判断是否存在，存在则遍历一级代理商
+			if(agentLV1){
+				for(var i = 0; i< agentLV1.length; i++){
+					var tbodytrStr =
+							'<td class="text-center">'+ agentLV1[i].user_name +'</td>'+
+							'<td class="text-center">'+ agentLV1[i].create_time +'</td>'+
+							'<td class="text-center">'+ agentLV1[i].sub_agent_nums +'</td>';
+					//获得个人数据
+					var personalDataArr = [];
+					var personalDataStr='';
+					for(var j=0;j<PathArr.length;j++){
+						var cacheNum = eval('d[1]' + '['+ i +'].' + PathArr[j]);
+						cacheNum = cacheNum == null ? 0 : parseFloat(cacheNum);
+						personalDataArr.push(cacheNum);
+						personalDataStr += '<td class="text-center">'+ cacheNum +'</td>';
+					}
+					//获得代理商数据
+					if(agentLV2) {
+						var agentLV2DataJson = getPersonalData(agentLV2,agentLV1[i].user_id);
+						var agentDataArr = agentLV2DataJson.arr;
+						var agentLV2UidArr = agentLV2DataJson.uidArr;
+						
+					}else {
+						var agentDataArr = [0,0,0,0,0,0,0,0];
+						$('.agentLV2-box').hide();
+					}
+					if(agentLV3) {
+						var agentDataArrLV3 = [0,0,0,0,0,0,0,0];
+						for(var k=0; k<agentLV2UidArr.length; k++) {
+							var agentLV3DataArr = getPersonalData(agentLV3,agentLV2UidArr[k]).arr;
+							console.log(agentLV3DataArr)
+							for(var l=0; l<agentDataArrLV3.length; l++){
+								agentDataArrLV3[l] += agentLV3DataArr[l];
+								
+							}
+						}
+						for(var m=0; m<PathArr.length; m++){
+							agentDataArr[m] += agentDataArrLV3[m];
+						}
+						
+					}else {
+						$('.agentLV3-box').hide();
+					}
+					var agentDataStr='';
+					var totalDataStr='';
+					for(var n=0; n<agentDataArr.length; n++){
+						agentDataStr += '<td class="text-center">'+ agentDataArr[n] +'</td>';
+						totalDataStr += '<td class="text-center">'+ (personalDataArr[n]+agentDataArr[n]) +'</td>';
+					}
+					tbodytrStr = tbodytrStr + totalDataStr + personalDataStr + agentDataStr;
+					$('.agentLV1-tbody').append('<tr class="todetails" data-userid="'+ agentLV1[i].user_id +'"><td class="text-center">'+ (i+1) +'</td>'+ tbodytrStr +'</tr>');
+				}
+			}
+			if(agentLV2){
+				for(var i = 0; i< agentLV2.length; i++){
+					var parentUID = agentLV2[i].parent_user_id;
+					var parentNAME;
+					for(var u=0; u< agentLV1.length; u++){
+						if(agentLV1[u].user_id == parentUID){
+							parentNAME = agentLV1[u].user_name;
+						}
+					}
+					var tbodytrStr =
+							'<td class="text-center">'+ agentLV2[i].user_name +'</td>'+
+							'<td class="text-center">'+ agentLV2[i].create_time +'</td>'+
+							'<td class="text-center">'+ parentNAME +'</td>'+
+							'<td class="text-center">'+ agentLV2[i].sub_agent_nums +'</td>';
+					//获得个人数据
+					var personalDataArr = [];
+					var personalDataStr='';
+					for(var j=0;j<PathArr.length;j++){
+						var cacheNum = eval('d[2]' + '['+ i +'].' + PathArr[j]);
+						cacheNum = cacheNum == null ? 0 : parseFloat(cacheNum);
+						personalDataArr.push(cacheNum);
+						personalDataStr += '<td class="text-center">'+ cacheNum +'</td>';
+					}
+					//获得代理商数据
+					if(agentLV3) {
+						var agentLV3DataJson = getPersonalData(agentLV3,agentLV2[i].user_id);
+						var agentDataArr = agentLV3DataJson.arr;
+						var agentLV3UidArr = agentLV3DataJson.uidArr;
+					}else {
+						var agentDataArr = [0,0,0,0,0,0,0,0];
+						$('.agentLV3-box').hide();
+					}
+					var agentDataStr='';
+					var totalDataStr='';
+					for(var m=0; m<agentDataArr.length; m++){
+						agentDataStr += '<td class="text-center">'+ agentDataArr[m] +'</td>';
+						totalDataStr += '<td class="text-center">'+ (personalDataArr[m]+agentDataArr[m]) +'</td>';
+					}
+					tbodytrStr = tbodytrStr + totalDataStr + personalDataStr + agentDataStr;
+					$('.agentLV2-tbody').append('<tr class="todetails" data-userid="'+ agentLV2[i].user_id +'"><td class="text-center">'+ (i+1) +'</td>'+ tbodytrStr +'</tr>');
+				}
+			}
+			if(agentLV3){
+				for(var i = 0; i< agentLV3.length; i++){
+					var parentUID = agentLV3[i].parent_user_id;
+					var parentNAME;
+					for(var u=0; u< agentLV2.length; u++){
+						if(agentLV2[u].user_id == parentUID){
+							parentNAME = agentLV2[u].user_name;
+						}
+					}
+					var tbodytrStr =
+							'<td class="text-center">'+ agentLV3[i].user_name +'</td>'+
+							'<td class="text-center">'+ agentLV3[i].create_time +'</td>'+
+							'<td class="text-center">'+ parentNAME +'</td>';
+					//获得个人数据
+					var personalDataArr = [];
+					var personalDataStr='';
+					for(var j=0;j<PathArr.length;j++){
+						var cacheNum = eval('d[3]' + '['+ i +'].' + PathArr[j]);
+						cacheNum = cacheNum == null ? 0 : parseFloat(cacheNum);
+						personalDataArr.push(cacheNum);
+						personalDataStr += '<td class="text-center">'+ cacheNum +'</td>';
+					}
+					tbodytrStr = tbodytrStr + personalDataStr;
+					$('.agentLV3-tbody').append('<tr class="todetails" data-userid="'+ agentLV3[i].user_id +'"><td class="text-center">'+ (i+1) +'</td>'+ tbodytrStr +'</tr>');
+				}
+			}
+			toDetails();
+		}
+	})
+
+</script>
+
+<!--- END 以下内容不需更改，请保证该TPL页内的标签匹配即可 --->
+<script>
+$("input").change(function() {
+	$("#butt").css("display", "block");
+ });
+</script>
+<?php include(dirname(__DIR__).'/footer.phtml');?>

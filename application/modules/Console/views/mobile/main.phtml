@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<title>快乐印数据统计</title>
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui">
+	<meta name="format-detection" content="telephone=no">
+	<script src="<?php echo Console\ADMIN_URL ?>assets/lib/jquery-1.8.1.min.js" ></script>
+	<style>
+		body {font:normal 14px/1.5 "\5FAE\8F6F\96C5\9ED1",Helvetica,STHeiti,Arial,sans-serif;-webkit-user-select: none;-webkit-text-size-adjust: none; }
+		body,div,dl,dt,dd,del,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,figure {margin:0;padding:0;}
+		input[type="text"],input[type="number"],input[type="password"],input[type="submit"],input[type="button"],textarea {-webkit-appearance: none;outline-style: none; resize: none; border:0;}
+		textarea{resize:none;overflow:auto;outline: none;}
+		table {border-collapse:collapse;border-spacing:0;}
+		fieldset,img {border:0;}
+		address,caption,cite,code,dfn,em,th,var {font-style:normal;font-weight:normal;}
+		ol,ul {list-style:none;}
+		li {vertical-align:top;}
+		caption,th {text-align:left;}
+		h1,h2,h3,h4,h5,h6 {font-size:100%; font-weight:normal; font-style: normal;}
+		i {font-style: normal;}
+		q:before,q:after {content:'';}
+		abbr,acronym {border:0;}
+		header, section {display:block;margin:0;padding:0;}
+		a{text-decoration: none;color: #000000;}
+		.clearfix{zoom: 1;}
+		.clearfix:after {content: "."; display: block; height: 0; clear: both; visibility: hidden;}
+		.unl {text-decoration: underline;}
+		.tl {text-align: left;}
+		.tc {text-align: center;}
+		.tr {text-align: right;}
+		.bc {margin-left: auto; margin-right: auto;}
+		.fl {float: left;}
+		.fr {float: right;}
+		.vm {vertical-align: middle;}
+		.vt {vertical-align: top;}
+		.pr {position: relative;}
+		.pa {position: absolute;}
+		.none { display: none;}
+		body {background: #f5f5f5;}
+		.box { margin-top: 60px; padding: 0 14px; height: 80px; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; background: #ffffff; position: relative;}
+		.title { padding: 0 10px; position: absolute; left: 10px; top: -27px; font-size: 14px; line-height: 26px; text-align: center;border-top-left-radius:5px; border-top-right-radius:5px; border: 1px solid #e0e0e0; background: #ffffff; border-bottom: none; }
+		.ul { margin-top: 20px; font-size: 0;}
+		.li { display: inline-block; box-sizing: border-box; width: 33.3333%; height: 40px; border-right: 1px solid #ededed;}
+		.ul .li:nth-last-child(1) {border-right: none;}
+		.value { font-size: 20px; color: #00bbff; font-weight: bold; line-height: 24px; text-align: center; white-space:nowrap;}
+		.name { font-size: 10px; color: #000000; text-align: center; line-height: 16px;}
+		.search { text-align: center}
+		.date { color: #999999; font-size: 14px; text-align: center; margin-top: 40px;}
+		.search-box { display: inline-block; margin-top: 40px;}
+		.search-title { color: #999999;}
+		.search-button { display: block; margin: 30px auto; width: 200px; height: 40px; line-height: 40px; font-size: 16px; color: #ffffff; font-weight: bold; border-radius: 10px; background: #00bbff;}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="title">订单统计</div>
+		<ul class="ul">
+			<li class="li">
+				<p class="value total-order">0</p>
+				<p class="name">总订单数</p>
+			</li>
+			<li class="li">
+				<p class="value free-order">0</p>
+				<p class="name">免费订单数</p>
+			</li>
+			<li class="li">
+				<p class="value cost-order">0</p>
+				<p class="name">付费订单数</p>
+			</li>
+		</ul>
+	</div>
+	<div class="box">
+		<div class="title">销售统计</div>
+		<ul class="ul">
+			<li class="li">
+				<p class="value sales">0</p>
+				<p class="name">总销售额</p>
+			</li>
+			<li class="li">
+				<p class="value cost">0</p>
+				<p class="name">成本</p>
+			</li>
+			<li class="li">
+				<p class="value profit">0</p>
+				<p class="name">利润</p>
+			</li>
+		</ul>
+	</div>
+	<p class="date">统计日期：<i class="date-con"></i></p>
+	<div class="search">
+		<div class="search-box">
+			<label class="search-title" for="search-date">选择查询日期:</label>
+			<input type="date" name="search-date" id="search-date" value="">
+		</div>
+		<a href="javascript:void(0)" class="search-button">查询</a>
+	</div>
+	<script>
+    	function isEmpty(d) {
+			return !d ? 0 : parseFloat(d);
+        }
+
+
+        function doIndent(n,d) {
+			if(d >= 100000 && d < 100000000 ) {
+				return (d/10000).toFixed(2) + '万';
+			}else if(d >= 100000000) {
+				return (d/100000000).toFixed(2) + '亿';
+			}else {
+				if(n==1) {
+					return Math.round(d);
+				}else if(n==2){
+					return d.toFixed(2);
+				}
+			}
+        }
+	
+    	$(function(){
+    		function search() {
+    			var dateValue = $('#search-date').val();
+        		$.ajax({
+        			url: location.protocol + '//' + location.host + '/Console/Mobile/SearchDate',
+        			dataType: 'json',
+        			data: {
+    					date: dateValue
+            		},
+        			success: function(d){
+            			console.log(d);
+        				var data = d.p.datas;
+        				//alert(JSON.stringify(d));
+
+        				var totalOrder = isEmpty(data.order_nums);
+        				var freeOrder = isEmpty(data.free_nums);
+        				var costOrder = totalOrder-freeOrder;
+        				$('.total-order').html(doIndent(1,totalOrder));
+        				$('.free-order').html(doIndent(1,freeOrder));
+        				$('.cost-order').html(doIndent(1,costOrder));
+
+        				var sales = isEmpty(data.totals);
+        				var cost = isEmpty(data.costs);
+            			var profit = sales-cost;
+        				$('.sales').html(doIndent(2,sales));
+        				$('.cost').html(doIndent(2,cost));
+        				$('.profit').html(doIndent(2,profit));
+
+        				$('.date-con').html(data.date_added);
+        				$('#search-date').val(data.date_added);
+        			},
+        			error: function(e){
+        				alert(JSON.stringify(e));
+        				//alert('获取失败');
+        			}
+        		})
+        	}
+    		search();
+
+    		$('.search-button').on('touchend',function(){
+    			search();
+        	})
+    	});
+	</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<?php 
+include(dirname(__DIR__).'/header.phtml');
+include(dirname(__DIR__)."/menu/navibar.phtml");
+include(dirname(__DIR__)."/menu/sideBar.phtml");
+?>
+<!--- START 以上内容不需更改，保证该TPL页内的标签匹配即可 --->
+<?php 
+ echo @$osadmin_action_alert;
+ echo @$osadmin_quick_note;
+?>
+    	<?php 
+            if($user_info['user_type'] != 1) {
+        ?>
+    	<div class="block">
+    	<?php 
+            } else {
+        ?>
+        <div class="none">
+        <?php 
+            }
+        ?>
+        <?php 
+            if($user_info['user_type'] != 1) {
+        ?>
+        <a href="#page-menu" class="block-heading" data-toggle="collapse">快捷菜单</a>
+        <div id="page-menu" class="block-body collapse in">
+        <h3>
+        <?php
+            if (!empty($menus)) {
+                foreach ($menus as $menu) {
+            ?>
+                <span>
+                    <a href="<?php echo Console\ADMIN_URL.$menu['menu_url'];?>"><?php echo $menu['menu_name'];?></a>
+                </span>&nbsp
+            <?php 
+                }
+            }
+        ?>
+        </h3>
+        <?php 
+            }
+        ?>
+        </div>
+    </div>
+    <div class="block">
+        <a href="#page-stats" class="block-heading" data-toggle="collapse">当前用户信息</a>
+        <div id="page-stats" class="block-body collapse in">
+               <table class="table table-striped">  
+                     <tr>
+                        <td>用户名</td>
+                        <td>真实姓名</td>
+                        <td>手机号</td>
+                        <td>Email</td>
+                        <td>登录时间</td>
+                        <td>登录IP</td>
+                    <?php 
+                    if($user_info['user_type'] == 1) {
+                    ?>
+                    	<td>代理级别</td>
+                    	<td>支付宝账号</td>
+                        <td>优惠劵专属标识</td>
+                    <?php
+                    }
+                    ?>
+                      </tr>
+                      <tr>
+                        <td><?php echo $user_info['user_name'];?></td>
+                        <td><?php echo $user_info['real_name']?></td>
+                        <td><?php echo $user_info['mobile'];?></td>
+                        <td><?php echo $user_info['email'];?></td>
+                        <td><?php echo $user_info['login_time'];?></td>
+                        <td><?php echo $user_info['login_ip'];?></td>
+                    <?php
+                    if($user_info['user_type'] == 1) {
+                    ?>
+                    	<td><?php echo $user_info['topic'];?></td>
+                        <td><?php echo $user_info['alipay']; ?></td>
+                        <td><?php echo $user_info['coupon_code']; ?></td>
+                    <?php
+                    }
+                    ?>
+                      </tr>
+                </table>
+    </div>
+
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>注意！</strong>请保管好您的个人信息，一点发生密码泄露请紧急联系管理员。紧急联系电话 : 18515001703</div>
+    </div>
+    </div>
+    <!-- 监测是否跳转移动端统计 -->
+    <script>
+		$(function(){
+			var screenWidth = $(window).width();
+			var screenHeight = $(window).height();
+
+			var ua = navigator.userAgent;
+			var environment = {
+				isIos: (ua.indexOf('Mac') > -1 && ua.indexOf('Mobile') > -1),
+				isAndroid: (ua.indexOf('Mozilla/5.0') > -1 && ua.indexOf('Android ') > -1 && ua.indexOf('AppleWebKit') > -1),
+				isWinPhone: (ua.indexOf('Windows Phone') > -1)
+			};
+
+			if(environment.isIos || environment.isAndroid || environment.isWinPhone) {
+				if(screenWidth < 768 && screenWidth < screenHeight) {
+					location.href = location.protocol + '//' + location.host + '/Console/Mobile/main';
+				}
+			}
+
+			
+		})
+    </script>
+<!--- END 以下内容不需更改，请保证该TPL页内的标签匹配即可 --->
+<script>
+$("input").change(function() {
+	$("#butt").css("display", "block");
+ });
+</script>
+<?php include(dirname(__DIR__).'/footer.phtml');?>

@@ -1,0 +1,39 @@
+<footer>
+                        <hr>
+                        <p class="pull-right"><a href="<?php echo Console\ADMIN\OFFICIAL_WEBSITE; ?>" target="_blank"></p>
+
+                        <p>&copy; <?php echo date('Y');?> <a href="<?php echo Console\ADMIN\OFFICIAL_WEBSITE;?>" target="_blank"><?php echo Console\ADMIN\BOTTOM_RIGHT_NAME; ?></a></p>
+                    </footer>
+				</div>
+			</div>
+		</div>
+    <script src="<?php echo Console\ADMIN_URL ?>assets/lib/bootstrap/js/bootstrap.js"></script>
+	
+<!--- + -快捷方式的提示 --->
+	
+<script type="text/javascript">	
+	
+alertDismiss("alert-success",3);
+alertDismiss("alert-info",10);
+	
+listenShortCut("icon-plus");
+listenShortCut("icon-minus");
+doSidebar();
+
+$(function(){
+	$('#content').hover(function(){
+		$('#sidebar-nav').css('overflow-y','auto');
+	},function(){
+		$('#sidebar-nav').css('overflow-y','auto');
+		})
+	$('#sidebar-nav').hover(function(){
+		$('#body').css('overflow-y','hidden');
+	},function(){
+		$('#body').css('overflow-y','auto');
+		})
+})
+	
+
+</script>
+  </body>
+</html>

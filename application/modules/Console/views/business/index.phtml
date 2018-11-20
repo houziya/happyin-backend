@@ -1,0 +1,372 @@
+<?php 
+include(dirname(__DIR__).'/header.phtml');
+include(dirname(__DIR__)."/menu/navibar.phtml");
+include(dirname(__DIR__)."/menu/sideBar.phtml");
+?>
+<style>
+.upfilebox {
+                position: relative;
+            }
+.upfilebox input {
+    width: 100px;
+    height: 45px;
+    position: relative;
+    z-index: 9;
+    opacity: 0;
+}
+.upfilebox label {
+    position: absolute;
+    background: #501521;
+    display: inline-block;
+    color: #fff;
+    width: 100px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    top: 0px;
+    left: 0px;
+}
+</style>
+<!--- START 以上内容不需更改，保证该TPL页内的标签匹配即可 --->
+<?php 
+ echo @$osadmin_action_alert;
+ echo @$osadmin_quick_note;
+?>
+    	<?php 
+            if ($new_info['user_type'] != 1) {
+        ?>
+    	<div class="block">
+    	<?php 
+            } else {
+        ?>
+        <div class="none">
+        <?php 
+            }
+        ?>
+        <?php 
+            if($new_info['user_type'] != 1) {
+        ?>
+        <a href="#page-menu" class="block-heading" data-toggle="collapse">快捷菜单</a>
+        <div id="page-menu" class="block-body collapse in">
+        <h3>
+        <?php
+            if (!empty($menus)) {
+                foreach ($menus as $menu) {
+            ?>
+                <span>
+                    <a href="<?php echo Console\ADMIN_URL.$menu['menu_url'];?>"><?php echo $menu['menu_name'];?></a>
+                </span>&nbsp
+            <?php 
+                }
+            }
+        ?>
+        </h3>
+        <?php 
+            }
+        ?>
+        </div>
+
+    </div>
+    <div class="block">
+        <a href="#page-stats" class="block-heading" data-toggle="collapse">当前用户信息</a>
+        <div id="page-stats" class="block-body collapse in">
+               <table class="table table-striped">  
+                     <tr>
+                        <td>用户名</td>
+                        <td>真实姓名</td>
+                        <td>手机号</td>
+                        <td>Email</td>
+                        <td>登录时间</td>
+                        <td>登录IP</td>
+                    <?php 
+                    if($new_info['user_type'] == 1) {
+                    ?>
+                    	<td>代理级别</td>
+                    	<td>上级代理</td>
+                    	<td>支付宝账号</td>
+                        <td>优惠劵专属标识</td>
+                    <?php
+                    }
+                    ?>
+                    </tr>
+                    <tr class="info">
+                        <td><?php echo $new_info['user_name'];?></td>
+                        <td><?php echo $new_info['real_name']?></td>
+                        <td><?php echo $new_info['mobile'];?></td>
+                        <td><?php echo $new_info['email'];?></td>
+                        <td><?php echo $new_info['login_time'];?></td>
+                        <td><?php echo $new_info['login_ip'];?></td>
+                    <?php
+                    if($new_info['user_type'] == 1) {
+                    ?>
+                    	<td><?php echo $new_info['topic'];?></td>
+                    	<td>
+                    	<?php
+                    	   if ($new_info['parent_info']['p_id'] == $new_info['user_id']) {
+                    	       echo '无';
+                    	   } else {
+                    	       echo $new_info['parent_info']['p_name'];
+                    	   }
+                    	?>
+                    	</td>
+                        <td><?php echo $new_info['alipay']; ?></td>
+                        <td><?php echo $new_info['coupon_code']; ?></td>
+                    <?php
+                    }
+                    ?>
+                  </tr>
+                </table>
+    </div>
+    <?php
+        if ($new_info['user_type'] == 1) {
+    ?>
+        <a href="#page-desc" class="block-heading" data-toggle="collapse">专属标识</a>
+            <div id="page-desc" class="block-body collapse in">
+    			 <table class="table table-striped" border="0px" >
+    			 	<tr>
+    			 		<td>优惠劵标识图</td>
+    			 		<td>二维码图</td>
+    			 	</tr>
+    			 	<tr>
+    			 		<td><image src="<?php echo HI\Config\QCloud\IMAGE\DOMAIN . '/' . $new_info['coupon_image'] ; ?>" class="img-rounded" alt="Cinque Terre"  width="100px" height="100px" ></td>
+    		 			<td><image src="<?php echo HI\Config\QCloud\IMAGE\DOMAIN . '/' . $new_info['coupon_image'] ; ?>" class="img-rounded" alt="Cinque Terre"  width="100px" height="100px" ></td>
+    			 	</tr>
+    			 	<form method="post" enctype="multipart/form-data" >
+ 	    			 <?php 
+    			         if ($new_info['user_type'] != 1) {
+    			     ?>
+        			 	<tr class="success">
+        			 		<td><span class="upfilebox"><input type="file" name="coupon"></span></td>
+        			 		<td><span class="upfilebox"><input type="file" name="sq"></span></td>
+        			 	</tr>
+    			 	<?php 
+    			         }
+    			 	?>
+    			 </table>
+    			  <button type="submit" class="btn btn-primary" id="butt" style="display:none;" ><strong>提交</strong></button>
+    		 	  </form>
+    		</div>
+    		<?php $userId = isset($_GET['user_id']) ? $_GET['user_id'] : ''; ?>
+    		<a href="#page-sale" class="block-heading" data-toggle="collapse">销售情况 </a>
+            <a href="<?php echo Console\ADMIN_URL . 'Console/Business/index?flag=1&user_id=' . $userId; ?>" class="btn btn-primary" style="margin-top:20px;margin-left:20px;">查看销售详情</a>
+            <div id="page-sale" class="block-body collapse in">
+            <?php
+                if ($flag != 1) {
+                if (!empty($sale['splitting'] && !empty($sale['total']))) {
+                    foreach ($sale['splitting'] as $key=>$value) {
+            ?>
+                    <table class="table table-striped">
+                            <caption>
+                            	<h5>
+                                	<?php 
+                                	if ($key == $user_info['topic']) {
+                                	    echo '个人' . '(' . $key . '级代理)';
+                                	} else {
+                                	    echo $key . '级代理';
+                                	};
+                                	?>
+                    			</h5>
+                    		</caption>
+                        		<tr>
+                        			<td>总销售额</td>
+                        			<td>上月销售</td>
+                        			<td>本月销售</td>
+                        			<td>今日销售</td>
+                        			<td>新增用户总计</td>
+                        			<td>上月新增</td>
+                        			<td>本月新增</td>
+                        			<td>今日新增</td>
+                        		</tr>
+                    			<tr class="success">
+                    				<td>
+                    				<?php
+                    				    $total = $value['last_month']['total'] + $value['current_month']['total'] + $value['current_day']['total'];
+                    				    $totalUser = $value['last_month']['new_user'] + $value['current_month']['new_user'] + $value['current_day']['new_user'];
+                    				    echo empty($total) ? 0 : $total;
+                    				?>
+                    				</td>
+                    				<td><?php echo empty($value['last_month']['total']) ? 0 : $value['last_month']['total']; ?></td>
+                    				<td><?php echo empty($value['current_month']['total']) ? 0 : $value['last_month']['total']; ?></td>
+                    				<td><?php echo empty($value['current_day']['total']) ? 0 : $value['current_day']['total']; ?></td>
+                    				<td><?php echo empty($totalUser) ? 0 : $totalUser; ?></td>
+                    				<td><?php echo empty($value['last_month']['new_user']) ? 0 : $value['last_month']['new_user']; ?></td>
+                    				<td><?php echo empty($value['current_month']['new_user']) ? 0 : $value['current_month']['new_user']; ?></td>
+                    				<td><?php echo empty($value['current_day']['new_user']) ? 0 : $value['current_day']['new_user']; ?></td>
+                    			</tr>
+                    	</table>
+            	<?php 
+                        }
+            	?>
+	                    <table class="table table-striped">
+                            <caption><h5>总计</h5></caption>
+                    		<tr>
+                    			<td>总销售额</td>
+                    			<td>上月销售</td>
+                    			<td>本月销售</td>
+                    			<td>今日销售</td>
+                    			<td>新增用户总计</td>
+                    			<td>上月新增</td>
+                    			<td>本月新增</td>
+                    			<td>今日新增</td>
+                    		</tr>
+                			<tr class="info">
+                				<td>
+                				<?php
+                				    $total = $sale['total']['last_month']['total'] + $sale['total']['current_month']['total'] + $sale['total']['current_day']['total'];
+                				    $totalUser = $sale['total']['last_month']['new_user'] + $sale['total']['current_month']['new_user'] + $sale['total']['current_day']['new_user'];
+                				    echo empty($total) ? 0 : $total; 
+                				?>
+                				</td>
+                				<td><?php echo empty($sale['total']['last_month']['total']) ? 0 : $sale['total']['last_month']['total']; ?></td>
+                				<td><?php echo empty($sale['total']['current_month']['total']) ? 0 : $sale['total']['last_month']['total']; ?></td>
+                				<td><?php echo empty($sale['total']['current_day']['total']) ? 0 : $sale['total']['current_day']['total']; ?></td>
+                				<td><?php echo empty($totalUser) ? 0 : $totalUser; ?></td>
+                				<td><?php echo empty($sale['total']['last_month']['new_user']) ? 0 : $sale['total']['last_month']['new_user']; ?></td>
+                				<td><?php echo empty($sale['total']['current_month']['new_user']) ? 0 : $sale['total']['current_month']['new_user']; ?></td>
+                				<td><?php echo empty($sale['total']['current_day']['new_user']) ? 0 : $sale['total']['current_day']['new_user']; ?></td>
+                			</tr>
+                    	</table>
+                    	<?php
+                           }
+                           if (!empty($detail)) {
+                    	   /* 二级代理 */
+                        	   foreach($detail as $k=>$value) {
+                	        ?>
+                    	        <h5>
+                    	        <?php echo $k. '级代理';?>
+                    	        <?php if ($user_info['user_type'] == 1) {?>
+                    	        <a href="<?php echo Console\ADMIN_URL.'Console/User/add'; ?>" class="btn btn-primary">
+                    	        	<i class="icon-plus"></i> 账号
+                    	        </a>
+                    	        <?php }?>
+                    	        </h5>
+                	       		<table class="table table-striped">
+                        		<tr>
+                        			<td>序号</td>
+                        			<td><?php echo $k. '级代理';?></td>
+                        			<td>签约日期</td>
+                        			<td>总销售额</td>
+                        			<td>上月销售</td>
+                        			<td>本月销售</td>
+                        			<td>今日销售</td>
+                        			<td>新增用户总计</td>
+                        			<td>上月新增</td>
+                        			<td>本月销售</td>
+                        			<td>今日新增</td>
+                        		</tr>
+                	       <?php
+                    	          foreach ($value as $key=>$total) {
+                    	    ?>
+                    			<tr class="info">
+                    				<td>
+                    				<?php
+                    				    echo $key+1;
+                    				    $list = $total['total'];
+                    				?>
+                    				</td>
+                    				<td><?php echo $total['user_name']; ?></td>
+                    				<td><?php echo $total['create_time']; ?></td>
+                    				<td><?php echo empty($list['sum']['total']) ? 0 : $list['sum']['total'];?></td>
+                    				<td><?php echo empty($list['last_month']['total']) ? 0 : $list['last_month']['total'];?></td>
+                    				<td><?php echo empty($list['current_month']['total']) ? 0 : $list['current_month']['total'];?></td>
+                    				<td><?php echo empty($list['current_day']['total']) ? 0 : $list['current_day']['total']; ?></td>
+                    				<td><?php echo empty($list['sum']['new_user']) ? 0 : $list['sum']['new_user'];?></td>
+                    				<td><?php echo empty($list['last_month']['new_user']) ? 0 : $list['last_month']['new_user'];?></td>
+                    				<td><?php echo empty($list['current_month']['new_user']) ? 0 : $list['current_month']['new_user'];?></td>
+                    				<td><?php echo empty($list['current_day']['new_user']) ? 0 : $list['current_day']['new_user']; ?></td>
+                    			</tr>
+                        	<?php
+                                    }
+                            ?>
+                            	</table>
+                            <?php
+                        	   }
+                           }
+                        } else {
+                    	?>
+            	<table class="table table-striped">
+            		<?php
+            		      if (!empty($order['list'][$new_info['topic']])) {
+            		?>
+                		<caption><h5>订单信息</h5></caption>
+                		<tr>
+                			<td>编号</td>
+                			<td>订单号</td>
+                			<td>订单时间</td>
+                			<td>实付金额</td>
+                			<td>代理级别</td>
+                		</tr>
+                		<?php
+                    		  $k = 1;
+                		      foreach($order['list'] as $devel=>$value) {
+            		              foreach ($value as $bigList) {
+                                    foreach ($bigList as $num=> $list) {
+                		?>
+            			<tr>
+            				<td><?php echo $k++; ?></td>
+            				<td><?php echo $list['order_number']; ?></td>
+            				<td><?php echo $list['date_added']; ?></td>
+            				<td><?php echo $list['total']; ?></td>
+            				<td>
+                				<?php
+                				    if ($user_info['topic'] == $devel) {
+                				        echo $devel . '级代理(个人)';
+                				    } else {
+                				        echo $devel . '级代理';
+                				    }
+                				?>
+            				</td>
+            			</tr>
+                		<?php
+                		              }
+                		          }
+                		      }
+                		  }
+            		    ?>
+            	</table>
+                <!--- START 分页模板 --->
+                
+                <?php echo $page_html;?>
+
+                <!--- END --->
+            	<?php 
+                    }
+            	?>
+        	</div>
+   	<?php 
+        }
+   	?>
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>注意！</strong>请保管好您的个人信息，一点发生密码泄露请紧急联系管理员。紧急联系电话 : 18515001703</div>
+    </div>
+    </div>
+    <!-- 监测是否跳转移动端统计 -->
+    <script>
+		$(function(){
+			var screenWidth = $(window).width();
+			var screenHeight = $(window).height();
+
+			var ua = navigator.userAgent;
+			var environment = {
+				isIos: (ua.indexOf('Mac') > -1 && ua.indexOf('Mobile') > -1),
+				isAndroid: (ua.indexOf('Mozilla/5.0') > -1 && ua.indexOf('Android ') > -1 && ua.indexOf('AppleWebKit') > -1),
+				isWinPhone: (ua.indexOf('Windows Phone') > -1)
+			};
+
+			if(environment.isIos || environment.isAndroid || environment.isWinPhone) {
+				if(screenWidth < 768 && screenWidth < screenHeight) {
+					location.href = location.protocol + '//' + location.host + '/Console/Mobile/main';
+				}
+			}
+
+			
+		})
+    </script>
+<!--- END 以下内容不需更改，请保证该TPL页内的标签匹配即可 --->
+<script>
+$("input").change(function() {
+	$("#butt").css("display", "block");
+ });
+</script>
+<?php include(dirname(__DIR__).'/footer.phtml');?>
